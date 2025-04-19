@@ -163,13 +163,13 @@ h1 {
 .eye-button {
   position: absolute;
   right: 1rem;
-  top: 1.4rem;
+  top: 2.5rem;
   background: transparent;
   border: none;
   color: hsl(var(--muted-foreground));
   cursor: pointer;
   transition: color 0.2s ease;
-}
+  }
 
 .eye-button:hover {
   color: hsl(var(--foreground));
