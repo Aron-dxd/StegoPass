@@ -184,7 +184,15 @@ function decodeImage(image) {
     showToast("Decryption failed. Check your key.", "error");
   } else {
     output.textContent = decryptedMessage;
-    showToast("Password successfully retrieved!", "success");
+    // Copy to clipboard
+    navigator.clipboard.writeText(decryptedMessage)
+      .then(() => {
+        showToast("Password retrieved and copied to clipboard!", "success");
+      })
+      .catch(err => {
+        console.error("Clipboard write failed:", err);
+        showToast("Password retrieved, but copy failed.", "error");
+      });
   }
 }
 
