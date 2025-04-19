@@ -34,8 +34,8 @@ Live demo: [StegoPass](https://aron-dxd.github.io/StegoPass/)
    ```bash
    git clone https://github.com/aron-dxd/StegoPass.git
    cd StegoPass
+   ```
 
 2. **Open the app**
 
-Open the index.html file directly in your browser
-(double-click it or serve it using a local HTTP server like live-server or Python's http.server)
+   Open the `index.html` file directly in your browser or use a local HTTP server.
