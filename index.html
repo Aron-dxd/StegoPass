@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Password Steganography</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./style.css">
+  </head>
+
+  <body class="min-h-screen">
+    <div class="container" id="drop">
+      <header class="mb-8">
+        <h1 class="text-3xl font-bold">StegoPass</h1>
+        <div class="info-panel">
+          <p class="text-sm">
+            Hide your passwords securely inside images using DCT-DWT steganography methods. Based on the paper
+            <a href="https://pdfs.semanticscholar.org/1c47/f281c00cffad4e30deff48a922553cb04d17.pdf" class="hover:underline">
+              "Combined DWT-DCT Digital Image Watermarking" by Ali Al-Haj
+            </a>.
+          </p>
+        </div>
+      </header>
+
+      <div class="tabs">
+        <button class="tab-button active" data-tab="encode">
+          <i class="fas fa-lock btn-icon"></i>Hide Password
+        </button>
+        <button class="tab-button" data-tab="decode">
+          <i class="fas fa-unlock btn-icon"></i>Reveal Password
+        </button>
+      </div>
+
+      <div class="tab-content active" id="encode-tab">
+        <div class="grid">
+          <div>
+            <div id="file-drop-area">
+              <i class="fas fa-cloud-upload-alt text-4xl mb-3" style="color: hsl(var(--primary-variant))"></i>
+              <p>Drop image here or click to select</p>
+              <input type="file" id="source-encode" class="hidden" accept="image/png">
+            </div>
+
+            <div class="input-group">
+              <label for="text-encode">Password to Hide:</label>
+              <textarea
+                placeholder="Enter password to hide"
+                rows="3"
+                id="text-encode"></textarea>
+              <p id="count-encode" class="text-xs text-gray-400 mt-1"></p>
+            </div>
+
+            <div class="input-group">
+              <label for="key-encode">Encryption Key:</label>
+              <input type="password" id="key-encode" placeholder="Enter encryption key">
+              <button class="eye-button" id="toggle-key-encode">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+
+            <div class="flex gap-3 mt-6">
+              <button id="encode-button" class="btn btn-primary flex-1">
+                <i class="fas fa-shield-alt btn-icon"></i>Encode & Encrypt
+              </button>
+              <button id="download-button" class="btn btn-secondary flex-1" disabled>
+                <i class="fas fa-download btn-icon"></i>Download
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p id="info-encode" class="text-center mb-2 text-sm" style="color: hsl(var(--muted-foreground))">Image Preview</p>
+            <canvas height="512" width="512" id="preview-encode" class="image-preview"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-content" id="decode-tab">
+        <div class="grid">
+          <div>
+            <div id="file-drop-area-decode">
+              <i class="fas fa-cloud-upload-alt text-4xl mb-3" style="color: hsl(var(--primary-variant))"></i>
+              <p>Drop image with hidden password or click to select</p>
+              <input type="file" id="source-decode" class="hidden" accept="image/png">
+            </div>
+
+            <div class="input-group">
+              <label for="key-decode">Decryption Key:</label>
+              <input type="password" id="key-decode" placeholder="Enter decryption key">
+              <button class="eye-button" id="toggle-key-decode">
+                <i class="fas fa-eye"></i>
+              </button>
+            </div>
+
+            <div class="mt-6">
+              <button id="decode-button" class="btn btn-primary w-full">
+                <i class="fas fa-key btn-icon"></i>Decode & Decrypt
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <p id="info-decode" class="text-center mb-2 text-sm" style="color: hsl(var(--muted-foreground))">Image Preview</p>
+            <canvas height="512" width="512" id="preview-decode" class="image-preview"></canvas>
+
+            <div class="info-panel mt-6">
+              <div class="flex justify-between items-center mb-2">
+                <h3 class="text-lg font-semibold">Recovered Password</h3>
+                <button id="copy-password" class="copy-btn">
+                  <i class="fas fa-copy"></i>Copy
+                </button>
+              </div>
+              <div class="output-container">
+                <p id="output" class="font-mono break-all"></p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <canvas width="512" height="512" id="buffer" hidden></canvas>
+      <img id="display" hidden></img>
+      <script src="main.js" type="module"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js"></script>
+    </div>
+  </body>
+</html>

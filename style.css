@@ -1,0 +1,291 @@
+:root {
+  --background: 0 0% 7%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 7%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 7%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 270 100% 50%;
+  --primary-foreground: 0 0% 100%;
+  --primary-variant: 260 100% 70%;
+  --secondary: 180 100% 25%;
+  --secondary-foreground: 0 0% 0%;
+  --secondary-variant: 180 50% 25%;
+  --muted: 0 0% 15%;
+  --muted-foreground: 0 0% 70%;
+  --accent: 270 100% 50%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 0 100% 37%;
+  --destructive-foreground: 0 0% 100%;
+  --error: 0 100% 40%;
+  --border: 0 0% 18%;
+  --input: 0 0% 10%;
+  --ring: 270 100% 50%;
+  --radius: 0.5rem;
+}
+
+body {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue';
+  overflow-wrap: break-word;
+}
+
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+h1, h2, h3 {
+  text-align: center;
+  line-height: 1.1;
+  font-weight: 600;
+}
+
+h1 {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  background-color: hsl(var(--card));
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+  border: 1px solid hsl(var(--border));
+}
+
+.tab-button {
+  flex: 1;
+  padding: 0.75rem;
+  text-align: center;
+  border-radius: var(--radius);
+  background-color: hsl(var(--muted));
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  border: none;
+  color: hsl(var(--muted-foreground));
+}
+
+.tab-button:hover {
+  background-color: hsl(var(--primary) / 0.8);
+  color: hsl(var(--primary-foreground));
+}
+
+.tab-button.active {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.tab-content {
+  display: none;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background-color: hsl(var(--card));
+  border: 1px solid hsl(var(--border));
+  animation: fadeIn 0.3s ease;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+.image-preview {
+  width: 100%;
+  max-width: 512px;
+  margin: 0 auto;
+  display: block;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background-color: hsl(var(--muted));
+}
+
+.info-panel {
+  background-color: hsl(var(--muted));
+  padding: 1rem;
+  border-radius: var(--radius);
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+#display {
+  max-width: 100%;
+  height: auto;
+  margin-top: 1rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 0.75rem 3rem 0.75rem 1rem;
+  background-color: hsl(var(--input));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  transition: border-color 0.15s ease;
+}
+
+.input-group textarea {
+  width: 100%;
+  min-height: 100px;
+  padding: 0.75rem 1rem;
+  background-color: hsl(var(--input));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  font-size: 1rem;
+  resize: vertical;
+  transition: border-color 0.15s ease;
+}
+
+.input-group input:focus, .input-group textarea:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.3);
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: hsl(var(--muted-foreground));
+}
+
+.eye-button {
+  position: absolute;
+  right: 1rem;
+  top: 1.4rem;
+  background: transparent;
+  border: none;
+  color: hsl(var(--muted-foreground));
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.eye-button:hover {
+  color: hsl(var(--foreground));
+}
+
+#file-drop-area, #file-drop-area-decode {
+  border: 2px dashed hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 2rem 1rem;
+  text-align: center;
+  transition: all 0.2s ease;
+  margin-bottom: 1rem;
+  background-color: hsl(var(--muted)) !important;
+}
+
+#file-drop-area.highlight, #file-drop-area-decode.highlight {
+  border-color: hsl(var(--primary));
+  background-color: hsl(var(--primary) / 0.1);
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--radius);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.btn-primary:hover {
+  background-color: hsl(var(--primary) / 0.9);
+}
+
+.btn-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+
+.btn-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.8);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-icon {
+  margin-right: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.copy-btn {
+  background-color: hsl(var(--primary-variant));
+  color: hsl(var(--primary-foreground));
+  border: none;
+  border-radius: var(--radius);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.copy-btn:hover {
+  background-color: hsl(var(--primary));
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+a {
+  color: hsl(var(--primary-variant));
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.output-container {
+  background-color: hsl(var(--input));
+  padding: 1rem;
+  border-radius: var(--radius);
+}
