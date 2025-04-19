@@ -257,61 +257,68 @@ function recursiveDecode(dataArray, currentSize, desiredSize) {
   }
 }
 
-function convertBinary(asciiString) {
-  const contentArray = new Uint8Array(contentLength);
-  const bufferArray = new Uint8Array(ec.messageLength);
-  const intArray = new Uint8Array(maxLength);
+function convertBinary(message) {
+    // 1. UTF‑8 encode into bytes
+    const encoder = new TextEncoder();
+    const rawBytes = encoder.encode(message);
 
-  for (let i = 0; i < Math.min(contentArray.length, asciiString.length); i++) {
-    contentArray[i] = asciiString.charCodeAt(i);
+    // 2. Pad/truncate to fit content slots
+    const contentArray = new Uint8Array(contentLength);
+    contentArray.set(rawBytes.subarray(0, contentLength));
+
+    const bufferArray = new Uint8Array(ec.messageLength);
+    const intArray    = new Uint8Array(maxLength);
+    const blocks      = Math.floor(maxLength / ec.messageLength);
+
+    // 3. RS‑encode block by block
+    for (let i = 0; i < blocks; i++) {
+      bufferArray.fill(0);
+      bufferArray.set(
+        contentArray.subarray(i * ec.dataLength, i * ec.dataLength + ec.dataLength)
+      );
+      encoder; ec.encode(bufferArray);
+      for (let j = 0; j < ec.messageLength; j++) {
+        intArray[i * ec.messageLength + j] = bufferArray[j];
+      }
+    }
+
+    // 4. Turn every byte into 8 bits
+    return Array.from(intArray)
+      .map(byte => byte.toString(2).padStart(8, "0"))
+      .join("");
   }
 
-  for (let i = 0; i < maxLength / ec.messageLength; i++) {
-    for (let j = 0; j < ec.dataLength; j++) {
-      bufferArray[j] = contentArray[i * ec.dataLength + j];
+  function convertASCII(bitString) {
+    // 1. Reassemble bytes from bits
+    const totalBytes = bitString.length / 8;
+    const byteArray  = new Uint8Array(totalBytes);
+    for (let i = 0; i < totalBytes; i++) {
+      byteArray[i] = parseInt(bitString.substr(i * 8, 8), 2);
     }
 
-    ec.encode(bufferArray);
+    const bufferArray  = new Uint8Array(ec.messageLength);
+    const decodedBytes = [];
 
-    for (let j = 0; j < ec.messageLength; j++) {
-      intArray[i * ec.messageLength + j] = bufferArray[j];
+    // 2. RS‑decode each block
+    const blocks = Math.floor(totalBytes / ec.messageLength);
+    for (let i = 0; i < blocks; i++) {
+      bufferArray.set(
+        byteArray.subarray(i * ec.messageLength, i * ec.messageLength + ec.messageLength)
+      );
+      try {
+        ec.decode(bufferArray);
+      } catch (e) {
+        console.warn("RS decode failed on block", i, e);
+      }
+      // collect only the data bytes
+      decodedBytes.push(...bufferArray.subarray(0, ec.dataLength));
     }
+
+    // 3. Trim trailing zeros and UTF‑8 decode
+    const trimmed = new Uint8Array(decodedBytes).filter(b => b !== 0);
+    const decoder = new TextDecoder();
+    return decoder.decode(trimmed);
   }
-
-  return Array.from(intArray).map((n) => n.toString(2).padStart(8, 0)).join("");
-}
-
-function convertASCII(binaryString) {
-  const bufferArray = new Uint8Array(ec.messageLength);
-  const intArray = new Uint8Array(maxLength);
-  let offset = 0;
-
-  while (binaryString.length > 0) {
-    const block = binaryString.substring(0, 8);
-    intArray[offset++] = parseInt(block, 2);
-    binaryString = binaryString.substring(8);
-  }
-
-  let res = "";
-
-  for (let i = 0; i < maxLength; i += ec.messageLength) {
-    for (let j = 0; j < ec.messageLength; j++) {
-      bufferArray[j] = intArray[i + j];
-    }
-
-    try {
-      ec.decode(bufferArray);
-    } catch (e) {
-      console.log("failed to correct", i);
-    }
-
-    for (let j = 0; j < ec.dataLength; j++) {
-      res += String.fromCharCode(bufferArray[j]);
-    }
-  }
-
-  return res;
-}
 
 function convertYCbCr(imageData, dataArray) {
   for (let i = 0; i < dataArray.length; i++) {
